@@ -4,21 +4,19 @@ use \Xusifob\Router;
 use \Acme\Services\DummySecurity;
 
 
-if(!file_exists(__DIR__ . '/../vendor/autoload.php')){
+if(!file_exists(__DIR__ . '/vendor/autoload.php')){
     die('Did you install the dependencies running composer install ?');
 }
 
 $loader = require_once "../vendor/autoload.php";
-if($loader instanceof \Composer\Autoload\ClassLoader){
-    $loader->add('Xusifob', __DIR__ . '/../src');
-}
 
-
+// Load all the Acme Dummy classes
 if($loader instanceof \Composer\Autoload\ClassLoader){
     $loader->add('Acme', __DIR__ . '/src');
 }
 
 
+// Create the security service to handle auth/view of the user
 $security = new DummySecurity();
 
 // An array of data to send to the controllers
