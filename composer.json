@@ -1,0 +1,22 @@
+{
+    "name": "xusifob/router",
+    "description": "A simple router to use for a quick web app",
+    "type": "composer-plugin",
+    "require": {
+        "symfony/http-foundation": "^4.2",
+        "php": ">=7.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Bastien Malahieude",
+            "email": "b.malahieude@free.fr"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-0": {
+            "Xusifob": "src/"
+        }
+    }
+}

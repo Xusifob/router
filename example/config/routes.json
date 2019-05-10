@@ -1,0 +1,58 @@
+{
+  "namespace" : "Acme",
+  "path" : "/",
+  "name" : "api",
+  "routes" : {
+    "test": {
+      "path": "test/",
+      "type": "GET",
+      "class": "DummyController",
+      "method": "test",
+      "config" : {
+        "foo" : "bar",
+        "bar" : "foo"
+      }
+    },
+    "dummy" : {
+      "path" : "dummy/:id",
+      "type" : "POST",
+      "class" : "DummyController",
+      "method" : "dummy"
+    },
+    "sub_path" : {
+      "path" : "subpath/",
+      "routes" : {
+        "test": {
+          "path": "test/",
+          "type": "GET",
+          "class": "DummyController",
+          "method": "subPathTest"
+        },
+        "dummy" : {
+          "path" : "dummy/:id",
+          "type" : "POST",
+          "class" : "DummyController",
+          "method" : "subPathDummy"
+        },
+        "sub_path" : {
+          "namespace" : "SubPath",
+          "path" : "subpath/",
+          "routes" : {
+            "test": {
+              "path": "test/",
+              "type": "GET",
+              "class": "DummyController",
+              "method": "subPathTest"
+            },
+            "dummy" : {
+              "path" : "dummy/:id",
+              "type" : "POST",
+              "class" : "DummyController",
+              "method" : "subPathDummy"
+            }
+          }
+        }
+      }
+    }
+  }
+}
