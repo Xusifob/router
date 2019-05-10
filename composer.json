@@ -1,7 +1,7 @@
 {
     "name": "xusifob/router",
     "description": "A simple router to use for a quick web app",
-    "type": "composer-plugin",
+    "type": "",
     "require": {
         "symfony/http-foundation": "^4.2",
         "php": ">=7.0"
@@ -15,8 +15,8 @@
     ],
     "minimum-stability": "dev",
     "autoload": {
-        "psr-0": {
-            "Xusifob": "src/"
+        "psr-4": {
+            "Xusifob\\": "src/"
         }
     }
 }
