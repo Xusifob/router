@@ -8,6 +8,7 @@
 namespace Xusifob;
 
 
+use http\Client\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 
@@ -20,7 +21,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  * Class Route
  * @package Xusifob
  */
-class Route {
+class Route implements \JsonSerializable {
 
 	/**
 	 * The host requested
@@ -148,18 +149,24 @@ class Route {
 		if($this->host !== null && $this->host !== $_SERVER['HTTP_HOST']) // for our usage, no need for regexp
 			return false;
 
-		if($this->type !== $_SERVER['REQUEST_METHOD'])
-			return false;
+		if(is_array($this->type)) {
+		    if(!in_array($_SERVER['REQUEST_METHOD'],$this->type)) {
+		        return  false;
+            }
+        } else {
 
+            if ($this->type !== $_SERVER['REQUEST_METHOD'])
+                return false;
+        }
 
 		$url = '/' .trim($url, '/');
 		$path = preg_replace_callback('#:([\w]+)#', [$this, 'paramMatch'], $this->path);
 		$regex = "#^\/$path$#i";
-
-		if(!preg_match($regex, $url, $matches)){
+		
+        if(!preg_match($regex, $url, $matches)){
 			return false;
 		}
-
+        
 		// Get the parameters id
 		preg_match_all('/(\/)?:.+\/?/i',$this->path,$parameters);
 
@@ -211,14 +218,14 @@ class Route {
 	 *
 	 * @param array     $data   An array of information that must be passed to the controller. It can contain an EntityManager
 	 *
-	 * @return JsonResponse
+	 * @return Response
 	 */
 	public function call($data){
 
 	    $className = $this->class;
 
 	    $class = new $className($data);
-
+	    
 		return call_user_func_array(array($class, $this->method), array($this->matches));
 	}
 
@@ -254,6 +261,32 @@ class Route {
     public function getConfig() : array
     {
         return $this->config;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMethod()
+    {
+        return $this->method;
+    }
+
+    /**
+     * @param string $method
+     */
+    public function setMethod($method)
+    {
+        $this->method = $method;
+    }
+    
+
+
+    public function jsonSerialize()
+    {
+        return array(
+            'method' => $this->method,
+            'type' => $this->type
+        );
     }
 
 

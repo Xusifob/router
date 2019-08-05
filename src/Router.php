@@ -8,6 +8,7 @@
 namespace Xusifob;
 
 use http\Exception\BadQueryStringException;
+use mysql_xdevapi\Exception;
 use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 use Xusifob\Services\Security;
@@ -160,8 +161,13 @@ class Router {
                     }
                 }
 
-
+                
                 $response =  $route->call(array_merge(array('security' => $this->securityService),$data));
+
+                
+                if(!$response instanceof Response) {
+                    throw new \Exception(sprintf("Method %s does not return an instance of Response, %s given",$route->getMethod(),$response));
+                }
 
                 $response->send();
                 return;
@@ -274,7 +280,7 @@ class Router {
 
             // Concatenate name with parent
             if(isset($parent['name'])) {
-                $name = $parent['name'] . '_' . $name;
+                $name = trim($parent['name'] . '_' . $name, '_');
             }
 
             $routeConfig['name'] = $name;

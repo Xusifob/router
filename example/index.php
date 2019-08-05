@@ -19,17 +19,23 @@ if($loader instanceof \Composer\Autoload\ClassLoader){
 // Create the security service to handle auth/view of the user
 $security = new DummySecurity();
 
-// An array of data to send to the controllers
-$config = array();
+
 
 try {
     $router = new Router($_GET['url'], __DIR__ . "/config/routes.json", $security);
+
+    // An array of data to send to the controllers
+    $config = array(
+        'security' => $security,
+        'router' => $router
+    );
+
     $router->run($config);
 }catch (\Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException $e) {
-    // @TODO Display 404 Page FOUND
-    echo "404 Page not found";
+    $response = new \Symfony\Component\HttpFoundation\Response("404 Page not found",\Symfony\Component\HttpFoundation\Response::HTTP_NOT_FOUND);
 }
 catch (\Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException $e) {
-    // @TODO Display Access Denied Page
-    echo "401 : Unauthorized";
+    $redirect =  new \Symfony\Component\HttpFoundation\RedirectResponse($router->generateUrl('home'));
+    $redirect->send();
+    die();
 }
