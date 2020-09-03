@@ -4,8 +4,7 @@
     "require": {
         "symfony/http-foundation": "^4.2",
         "php": ">=7.0",
-        "ext-json": "*",
-        "ext-http": "*"
+        "ext-json": "*"
     },
     "license": "MIT",
     "authors": [
