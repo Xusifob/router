@@ -1,14 +1,11 @@
 {
     "name": "xusifob/router",
     "description": "A simple router to use for a quick web app",
-    "type": "composer-plugin",
+    "type": "library",
     "require": {
         "symfony/http-foundation": "^4.2",
         "php": ">=7.0",
         "ext-json": "*"
-    },
-    "extra": {
-        "class": "Xusifob"
     },
     "license": "MIT",
     "authors": [
