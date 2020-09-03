@@ -5,7 +5,7 @@
  */
 
 
-namespace Xusifob;
+namespace Xusifob\Router;
 
 
 use http\Client\Response;
@@ -162,11 +162,11 @@ class Route implements \JsonSerializable {
 		$url = '/' .trim($url, '/');
 		$path = preg_replace_callback('#:([\w]+)#', [$this, 'paramMatch'], $this->path);
 		$regex = "#^\/$path$#i";
-		
+
         if(!preg_match($regex, $url, $matches)){
 			return false;
 		}
-        
+
 		// Get the parameters id
 		preg_match_all('/(\/)?:.+\/?/i',$this->path,$parameters);
 
@@ -225,7 +225,7 @@ class Route implements \JsonSerializable {
 	    $className = $this->class;
 
 	    $class = new $className($data);
-	    
+
 		return call_user_func_array(array($class, $this->method), array($this->matches));
 	}
 
@@ -278,7 +278,7 @@ class Route implements \JsonSerializable {
     {
         $this->method = $method;
     }
-    
+
 
 
     public function jsonSerialize()

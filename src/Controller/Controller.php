@@ -4,11 +4,11 @@
  * Interface for Controllers
  */
 
-namespace Xusifob\Controller;
+namespace Xusifob\Router\Controller;
 
 
 
-use Xusifob\Services\Security;
+use Xusifob\Router\Services\Security;
 
 /**
  *

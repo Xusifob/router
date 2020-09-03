@@ -5,15 +5,15 @@
  */
 
 
-namespace Xusifob;
+namespace Xusifob\Router;
 
 use http\Exception\BadQueryStringException;
-use mysql_xdevapi\Exception;
 use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
-use Xusifob\Services\Security;
+use Xusifob\Router\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Xusifob\Router\Services\Security;
 
 /**
  *
@@ -161,10 +161,10 @@ class Router {
                     }
                 }
 
-                
+
                 $response =  $route->call(array_merge(array('security' => $this->securityService),$data));
 
-                
+
                 if(!$response instanceof Response) {
                     throw new \Exception(sprintf("Method %s does not return an instance of Response, %s given",$route->getMethod(),$response));
                 }

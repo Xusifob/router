@@ -5,10 +5,10 @@
  */
 
 
-namespace Xusifob\Services;
+namespace Xusifob\Router\Services;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Xusifob\Route;
+use Xusifob\Router\Route;
 
 /**
  *

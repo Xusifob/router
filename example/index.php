@@ -22,7 +22,10 @@ $security = new DummySecurity();
 
 
 try {
-    $router = new Router($_GET['url'], __DIR__ . "/config/routes.json", $security);
+
+    $routes = include 'config/routes.php';
+
+    $router = new Router($_GET['url'], $security);
 
     // An array of data to send to the controllers
     $config = array(
