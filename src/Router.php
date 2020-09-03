@@ -54,6 +54,9 @@ class Router {
      */
     public function __construct(string $url,Security $securityService,string $config = 'config/routes.php') {
 
+        if(empty($url)) {
+            $url = "/";
+        }
 
         $this->securityService = $securityService;
 

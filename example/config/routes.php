@@ -1,7 +1,8 @@
 <?php
 
+use Acme\Controller\DummyController;
+
 return array (
-    'namespace' => 'Acme',
     'path' => '/',
     'name' => 'app',
     'routes' =>
@@ -10,7 +11,7 @@ return array (
                 array (
                     'path' => '/',
                     'type' => 'GET',
-                    'class' => 'DummyController',
+                    'class' => DummyController::class,
                     'method' => 'test',
                     'config' =>
                         array (
