@@ -2,11 +2,11 @@
 
 return array (
     'namespace' => 'Acme',
-    'path' => '',
-    'name' => 'api',
+    'path' => '/',
+    'name' => 'app',
     'routes' =>
         array (
-            'test' =>
+            'home' =>
                 array (
                     'path' => '/',
                     'type' => 'GET',

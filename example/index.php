@@ -1,8 +1,11 @@
 <?php
 
-use \Xusifob\Router;
+use \Xusifob\Router\Router;
 use \Acme\Services\DummySecurity;
 
+
+ini_set('display_startup_errors',1);
+ini_set('display_errors',1);
 
 if(!file_exists(__DIR__ . '/vendor/autoload.php')){
     die('Did you install the dependencies running composer install ?');
@@ -23,9 +26,7 @@ $security = new DummySecurity();
 
 try {
 
-    $routes = include 'config/routes.php';
-
-    $router = new Router($_GET['url'], $security);
+    $router = new Router($_GET['url'],$security);
 
     // An array of data to send to the controllers
     $config = array(
@@ -38,7 +39,7 @@ try {
     $response = new \Symfony\Component\HttpFoundation\Response("404 Page not found",\Symfony\Component\HttpFoundation\Response::HTTP_NOT_FOUND);
 }
 catch (\Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException $e) {
-    $redirect =  new \Symfony\Component\HttpFoundation\RedirectResponse($router->generateUrl('home'));
+    $redirect =  new \Symfony\Component\HttpFoundation\RedirectResponse($router->generateUrl('app_home'));
     $redirect->send();
     die();
 }

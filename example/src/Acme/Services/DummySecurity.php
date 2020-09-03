@@ -8,8 +8,8 @@
 namespace Acme\Services;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Xusifob\Route;
-use Xusifob\Services\Security;
+use Xusifob\Router\Route;
+use Xusifob\Router\Services\Security;
 
 /**
  *
