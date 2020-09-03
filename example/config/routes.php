@@ -19,6 +19,19 @@ return array (
                             'bar' => 'foo',
                         ),
                 ),
+            'login' =>
+                array (
+                    'path' => '/',
+                    'type' => 'GET',
+                    'class' => DummyController::class,
+                    'method' => 'login',
+                    'visible' => true,
+                    'config' =>
+                        array (
+                            'foo' => 'bar',
+                            'bar' => 'foo',
+                        ),
+                ),
             'dummy' =>
                 array (
                     'path' => 'dummy/:id',

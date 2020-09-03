@@ -2,7 +2,12 @@
 
 use \Xusifob\Router\Router;
 use \Acme\Services\DummySecurity;
-
+use \Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use \Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use \Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use \Symfony\Component\HttpFoundation\Response;
+use \Symfony\Component\HttpFoundation\RedirectResponse;
 
 ini_set('display_startup_errors',1);
 ini_set('display_errors',1);
@@ -35,11 +40,21 @@ try {
     );
 
     $router->run($config);
-}catch (\Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException $e) {
-    $response = new \Symfony\Component\HttpFoundation\Response("404 Page not found",\Symfony\Component\HttpFoundation\Response::HTTP_NOT_FOUND);
+}catch (NotFoundHttpException $e) {
+    $response = new Response($e->getMessage(),Response::HTTP_NOT_FOUND);
 }
-catch (\Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException $e) {
-    $redirect =  new \Symfony\Component\HttpFoundation\RedirectResponse($router->generateUrl('app_home'));
+catch (UnauthorizedHttpException $e) {
+    $redirect =  new RedirectResponse($router->generateUrl('app_login'));
     $redirect->send();
+    die();
+}
+catch (AccessDeniedHttpException $e) {
+    $response = new Response($e->getMessage(),Response::HTTP_FORBIDDEN);
+    $response->send();
+    die();
+}
+catch (BadRequestHttpException $e) {
+    $response = new Response($e->getMessage(),Response::HTTP_BAD_REQUEST);
+    $response->send();
     die();
 }

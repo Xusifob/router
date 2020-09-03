@@ -45,6 +45,17 @@ class DummyController extends Controller
         die('You reached the dummy controller');
     }
 
+  /**
+     * @param array $matches
+     */
+    public function login($matches = array())
+    {
+        var_dump($matches);
+        var_dump($this->getSecurity());
+
+        die('You can log in here');
+    }
+
 
 
 

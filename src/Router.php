@@ -7,11 +7,11 @@
 
 namespace Xusifob\Router;
 
-use http\Exception\BadQueryStringException;
-use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
-use Xusifob\Router\Route;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\HttpFoundation\Response;
 use Xusifob\Router\Services\Security;
 
@@ -136,16 +136,12 @@ class Router {
      * It will also send the response from the controller
      *
      * @param $data
-     * @throws BadQueryStringException
-     * @throws AccessDeniedException
-     * @throws FileNotFoundException
-     * @throws AccessDeniedException
      */
     public function run($data){
 
 
         if(!is_array($this->routes)){
-            throw new BadQueryStringException("Routes array cannot be empty");
+            throw new BadRequestHttpException("Routes array cannot be empty");
         }
 
 
@@ -156,11 +152,11 @@ class Router {
 
                 if(!$route->isVisible()) {
                     if(!$this->securityService->isLoggedIn()) {
-                        throw new AccessDeniedException("Accesss Denied");
+                        throw new UnauthorizedHttpException("Unauthorized");
                     }
 
                     if(!$this->securityService->canView($route)) {
-                        throw new AccessDeniedException("Access Denied");
+                        throw new AccessDeniedHttpException("Access Denied");
                     }
                 }
 
@@ -177,7 +173,7 @@ class Router {
             }
         }
 
-        throw new FileNotFoundException("No route found");
+        throw new NotFoundHttpException("No route found");
     }
 
     /**
@@ -234,7 +230,7 @@ class Router {
      * @param $configPath string  the path to the config file
      *
      *
-     * @throws BadQueryStringException
+     * @throws BadRequestHttpException
      *
      */
     protected function loadRoutes($configPath)
@@ -247,7 +243,7 @@ class Router {
         $config = require $configPath;
 
         if(empty($config) || !isset($config['routes'])) {
-            throw new BadQueryStringException();
+            throw new BadRequestHttpException();
         }
 
 
