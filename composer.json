@@ -5,7 +5,7 @@
         "symfony/http-foundation": "^4.2",
         "php": ">=7.0",
         "ext-json": "*",
-        "symfony/http-kernel": "^5.2@dev"
+        "symfony/http-kernel": "^4.2"
     },
     "license": "MIT",
     "authors": [
