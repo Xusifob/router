@@ -10,6 +10,7 @@ namespace Xusifob\Router;
 
 use http\Client\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 
 /**
@@ -166,9 +167,10 @@ class Route implements \JsonSerializable {
 
         $url = '/' .trim($url, '/');
         $path = preg_replace_callback('#:([\w]+)#', [$this, 'paramMatch'], $this->path);
-        $regex = "#^\/$path$#i";
+        $path = str_replace('//','/',"/$path");
+        $regex = '#^\\'. $path .'$#i';
 
-        if(!preg_match($regex, $url, $matches)){
+        if(0 === preg_match($regex, $url, $matches)){
             return false;
         }
 
@@ -230,6 +232,10 @@ class Route implements \JsonSerializable {
         $className = $this->class;
 
         $class = new $className($data);
+
+        if(!method_exists($class,$this->method)) {
+            throw new BadRequestHttpException("Method {$this->method} not found in class $className");
+        }
 
         return call_user_func_array(array($class, $this->method), array($this->matches));
     }
@@ -293,6 +299,4 @@ class Route implements \JsonSerializable {
             'type' => $this->type
         );
     }
-
-
 }

@@ -1,13 +1,9 @@
 <?php
 
-/**
- * Interface for Controllers
- */
-
 namespace Xusifob\Router\Controller;
 
-
-
+use Symfony\Component\HttpFoundation\Request;
+use Xusifob\Router\Router;
 use Xusifob\Router\Services\Security;
 
 /**
@@ -45,6 +41,22 @@ abstract class Controller
         return $this->getData('security');
     }
 
+    /**
+     * @return Router
+     */
+    public function getRouter() : Router
+    {
+        return $this->getData('router');
+    }
+
+    /**
+     * @return Request|null
+     */
+    public function getRequest() : Request
+    {
+        return $this->getData('request');
+    }
+
 
     /**
      * @param $string
@@ -56,10 +68,7 @@ abstract class Controller
             return $this->data[$string];
         }
 
-        return false;
+        return null;
     }
-
-
-
 
 }

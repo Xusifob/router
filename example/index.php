@@ -9,50 +9,40 @@ use \Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use \Symfony\Component\HttpFoundation\Response;
 use \Symfony\Component\HttpFoundation\RedirectResponse;
 
-ini_set('display_startup_errors',1);
-ini_set('display_errors',1);
 
-if(!file_exists(__DIR__ . '/vendor/autoload.php')){
-    die('Did you install the dependencies running composer install ?');
-}
-
-$loader = require_once "../vendor/autoload.php";
-
-// Load all the Acme Dummy classes
-if($loader instanceof \Composer\Autoload\ClassLoader){
-    $loader->add('Acme', __DIR__ . '/src');
-}
-
+$config = require 'load.php';
 
 // Create the security service to handle auth/view of the user
 $security = new DummySecurity();
 
-
-
 try {
 
-    $router = new Router($_GET['url'],$security);
-
+    $router = new Router($security);
     // An array of data to send to the controllers
     $config = array(
         'security' => $security,
-        'router' => $router
     );
-
     $router->run($config);
+
+// File not found, route not found
 }catch (NotFoundHttpException $e) {
     $response = new Response($e->getMessage(),Response::HTTP_NOT_FOUND);
+    $response->send();
+    die();
 }
+// User is not logged in (401)
 catch (UnauthorizedHttpException $e) {
     $redirect =  new RedirectResponse($router->generateUrl('app_login'));
     $redirect->send();
     die();
 }
+// Access Forbidden (403)
 catch (AccessDeniedHttpException $e) {
     $response = new Response($e->getMessage(),Response::HTTP_FORBIDDEN);
     $response->send();
     die();
 }
+// Bad request
 catch (BadRequestHttpException $e) {
     $response = new Response($e->getMessage(),Response::HTTP_BAD_REQUEST);
     $response->send();

@@ -8,6 +8,7 @@
 namespace Xusifob\Router;
 
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -27,6 +28,10 @@ use Xusifob\Router\Services\Security;
 class Router {
 
 
+    const URL_RELATIVE = 'relative';
+
+    const URL_ABSOLUTE = 'absolute';
+
     /**
      * @var string
      */
@@ -44,6 +49,12 @@ class Router {
     private $securityService;
 
 
+    /**
+     * @var Request
+     */
+    protected $request;
+
+
 
     /**
      * Router constructor.
@@ -52,7 +63,12 @@ class Router {
      * @param Security          $securityService    The service used by the router to handle security
      * @param string            $config             Path to the JSON configuration file
      */
-    public function __construct(string $url,Security $securityService,string $config = 'config/routes.php') {
+    public function __construct(Security $securityService,string $config = 'config/routes.php') {
+
+        $url = "";
+        if(isset($_GET['url'])) {
+            $url = $_GET['url'];
+        }
 
         if(empty($url)) {
             $url = "/";
@@ -144,12 +160,15 @@ class Router {
             throw new BadRequestHttpException("Routes array cannot be empty");
         }
 
+        $this->request =  Request::createFromGlobals();
+
+        $data['router'] = $this;
+        $data['request'] = $this->request;
 
         foreach($this->getRoutes() as $key =>  $route){
 
             /** @var route Route */
             if($route->match($this->url)){
-
                 if(!$route->isVisible()) {
                     if(!$this->securityService->isLoggedIn()) {
                         throw new UnauthorizedHttpException("Unauthorized");
@@ -208,19 +227,30 @@ class Router {
      *
      * @throws FileNotFoundException
      */
-    public function generateUrl($route, $params = array())
+    public function generateUrl($route, $params = array(),$type = self::URL_RELATIVE)
     {
 
         if(!isset($this->routes[$route])) {
-            throw new FileNotFoundException(sprintf('La route %s n\'existe pas',$route));
+            throw new NotFoundHttpException(sprintf('La route %s n\'existe pas',$route));
         }
 
         $_route = $this->routes[$route];
 
 
-        return $_route->generateUrl($params);
+        $path = $_route->generateUrl($params,$type);
+
+        // Add the subdirectory in the request
+        $path = str_replace('//','/',"/" . $this->request->getBaseUrl() . '/' . $path);
+
+        if($type === self::URL_RELATIVE) {
+            return $path;
+        }
+
+        return $this->request->getSchemeAndHttpHost() . $path;
 
     }
+
+
 
 
     /**
@@ -300,8 +330,5 @@ class Router {
             }
 
         }
-
     }
-
-
 }
