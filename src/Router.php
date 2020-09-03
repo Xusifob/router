@@ -49,10 +49,10 @@ class Router {
      * Router constructor.
      *
      * @param string            $url                The Current URL to test in our router
-     * @param string            $config             Path to the JSON configuration file
      * @param Security          $securityService    The service used by the router to handle security
+     * @param string            $config             Path to the JSON configuration file
      */
-    public function __construct($url,$config,Security $securityService) {
+    public function __construct(string $url,Security $securityService,string $config = 'config/routes.php') {
 
 
         $this->securityService = $securityService;
@@ -212,12 +212,12 @@ class Router {
     public function generateUrl($route, $params = array())
     {
 
-
         if(!isset($this->routes[$route])) {
             throw new FileNotFoundException(sprintf('La route %s n\'existe pas',$route));
         }
 
         $_route = $this->routes[$route];
+
 
         return $_route->generateUrl($params);
 
@@ -241,7 +241,7 @@ class Router {
             throw new FileNotFoundException($configPath);
         }
 
-        $config = json_decode(file_get_contents($configPath),true);
+        $config = require $configPath;
 
         if(empty($config) || !isset($config['routes'])) {
             throw new BadQueryStringException();
