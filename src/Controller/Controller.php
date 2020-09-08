@@ -1,8 +1,15 @@
 <?php
 
+/**
+ * Interface for Controllers
+ */
+
 namespace Xusifob\Router\Controller;
 
+
+
 use Symfony\Component\HttpFoundation\Request;
+use Xusifob\Router\Route;
 use Xusifob\Router\Router;
 use Xusifob\Router\Services\Security;
 
@@ -52,7 +59,7 @@ abstract class Controller
     /**
      * @return Request|null
      */
-    public function getRequest() : Request
+    public function getRequest() : ?Request
     {
         return $this->getData('request');
     }

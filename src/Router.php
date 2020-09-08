@@ -55,6 +55,17 @@ class Router {
     protected $request;
 
 
+    /**
+     * @var string
+     */
+    protected $baseUrl;
+
+    /**
+     * @var string
+     */
+    protected $domain;
+
+
 
     /**
      * Router constructor.
@@ -162,6 +173,11 @@ class Router {
 
         $this->request =  Request::createFromGlobals();
 
+        if($this->request instanceof Request) {
+            $this->setBaseUrl($this->request->getBaseUrl());
+            $this->setDomain($this->request->getSchemeAndHttpHost());
+        }
+
         $data['router'] = $this;
         $data['request'] = $this->request;
 
@@ -236,19 +252,19 @@ class Router {
 
         $_route = $this->routes[$route];
 
-
         $path = $_route->generateUrl($params,$type);
 
         // Add the subdirectory in the request
-        $path = str_replace('//','/',"/" . $this->request->getBaseUrl() . '/' . $path);
+        $path = str_replace('//','/',"/" . $this->getBaseUrl() . '/' . $path);
 
         if($type === self::URL_RELATIVE) {
             return $path;
         }
 
-        return $this->request->getSchemeAndHttpHost() . $path;
+        return $this->getDomain() . $path;
 
     }
+
 
 
 
@@ -271,6 +287,7 @@ class Router {
         }
 
         $config = require $configPath;
+
 
         if(empty($config) || !isset($config['routes'])) {
             throw new BadRequestHttpException();
@@ -330,5 +347,40 @@ class Router {
             }
 
         }
+
     }
+
+    /**
+     * @return string
+     */
+    public function getBaseUrl(): string
+    {
+        return $this->baseUrl;
+    }
+
+    /**
+     * @param string $baseUrl
+     */
+    public function setBaseUrl(string $baseUrl): void
+    {
+        $this->baseUrl = $baseUrl;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDomain(): string
+    {
+        return $this->domain;
+    }
+
+    /**
+     * @param string $domain
+     */
+    public function setDomain(string $domain): void
+    {
+        $this->domain = $domain;
+    }
+
+
 }

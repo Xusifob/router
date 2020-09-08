@@ -257,7 +257,6 @@ class Route implements \JsonSerializable {
         }
 
 
-
         foreach($params as $key =>  $param) {
             $_route = str_replace(':' . $key,$param,$_route);
         }
@@ -299,4 +298,6 @@ class Route implements \JsonSerializable {
             'type' => $this->type
         );
     }
+
+
 }
