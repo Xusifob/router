@@ -382,5 +382,15 @@ class Router {
         $this->domain = $domain;
     }
 
+    /**
+     * @return Request
+     */
+    public function getRequest(): ?Request
+    {
+        return $this->request;
+    }
+
+
+
 
 }
