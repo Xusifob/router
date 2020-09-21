@@ -38,6 +38,7 @@ return array (
                     'type' => 'POST',
                     'class' => 'DummyController',
                     'method' => 'dummy',
+                    'roles' => array('admin'),
                 ),
             'sub_path' =>
                 array (

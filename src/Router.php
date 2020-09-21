@@ -390,7 +390,4 @@ class Router {
         return $this->request;
     }
 
-
-
-
 }

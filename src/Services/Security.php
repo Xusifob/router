@@ -37,7 +37,22 @@ abstract class Security
      */
     public function isLoggedIn()
     {
-        return self::getCurrentUser() !== false;
+        return $this->getCurrentUser() !== false;
+    }
+
+    /**
+     * @return string|null
+     */
+    abstract public function getRole() : ?string;
+
+
+    /**
+     * @param string $role
+     * @return bool
+     */
+    public function isRole(string $role)
+    {
+        return $this->getRole() === $role;
     }
 
 
