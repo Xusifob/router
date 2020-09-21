@@ -252,7 +252,7 @@ class Router {
 
         $_route = $this->routes[$route];
 
-        $path = $_route->generateUrl($params,$type);
+        $path = $_route->generateUrl($params);
 
         // Add the subdirectory in the request
         $path = str_replace('//','/',"/" . $this->getBaseUrl() . '/' . $path);

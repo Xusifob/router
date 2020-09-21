@@ -258,8 +258,15 @@ class Route implements \JsonSerializable {
 
 
         foreach($params as $key =>  $param) {
-            $_route = str_replace(':' . $key,$param,$_route);
+            if(strpos($_route,":$key" !== false)) {
+                $_route = str_replace(':' . $key, $param, $_route);
+                unset($params[$key]);
+            }
         }
+
+        $_route .= strpos($_route,"?") === false ? "?" : "&";
+        $_route .= http_build_query($params);
+
 
         return $_route;
     }
