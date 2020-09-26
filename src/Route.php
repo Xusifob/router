@@ -258,7 +258,7 @@ class Route implements \JsonSerializable {
 
 
         foreach($params as $key =>  $param) {
-            if(strpos($_route,":$key" !== false)) {
+            if(strpos($_route,":$key") !== false) {
                 $_route = str_replace(':' . $key, $param, $_route);
                 unset($params[$key]);
             }
