@@ -264,9 +264,10 @@ class Route implements \JsonSerializable {
             }
         }
 
-        $_route .= strpos($_route,"?") === false ? "?" : "&";
-        $_route .= http_build_query($params);
-
+        if($params) {
+            $_route .= strpos($_route, "?") === false ? "?" : "&";
+            $_route .= http_build_query($params);
+        }
 
         return $_route;
     }
