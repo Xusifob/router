@@ -32,6 +32,11 @@ class Router {
 
     const URL_ABSOLUTE = 'absolute';
 
+
+    const MODE_STANDALONE = 'standalone';
+
+    const MODE_INCLUDED = 'included';
+
     /**
      * @var string
      */
@@ -64,6 +69,9 @@ class Router {
      * @var string
      */
     protected $domain;
+
+
+    protected $mode = self::MODE_STANDALONE;
 
 
 
@@ -163,8 +171,11 @@ class Router {
      * It will also send the response from the controller
      *
      * @param $data
+     * @return Response|null
+     * @throws \Exception
      */
-    public function run($data){
+    public function run($data) : ?Response
+    {
 
 
         if(!is_array($this->routes)){
@@ -203,8 +214,12 @@ class Router {
                     throw new \Exception(sprintf("Method %s does not return an instance of Response, %s given",$route->getMethod(),$response));
                 }
 
-                $response->send();
-                return;
+                if($this->mode === self::MODE_STANDALONE) {
+                    $response->send();
+                    return null;
+                } else if($this->mode === self::MODE_INCLUDED) {
+                    return $response;
+                }
             }
         }
 
@@ -388,6 +403,22 @@ class Router {
     public function getRequest(): ?Request
     {
         return $this->request;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMode() : string
+    {
+        return $this->mode;
+    }
+
+    /**
+     * @param string $mode
+     */
+    public function setMode(string $mode) : void
+    {
+        $this->mode = $mode;
     }
 
 }
