@@ -185,8 +185,12 @@ class Router {
         $this->request =  Request::createFromGlobals();
 
         if($this->request instanceof Request) {
-            $this->setBaseUrl($this->request->getBaseUrl());
-            $this->setDomain($this->request->getSchemeAndHttpHost());
+            if(!$this->getBaseUrl()) {
+                $this->setBaseUrl($this->request->getBaseUrl());
+            }
+            if(!$this->getDomain()) {
+                $this->setDomain($this->request->getSchemeAndHttpHost());
+            }
         }
 
         $data['router'] = $this;
@@ -368,7 +372,7 @@ class Router {
     /**
      * @return string
      */
-    public function getBaseUrl(): string
+    public function getBaseUrl(): ?string
     {
         return $this->baseUrl;
     }
@@ -384,7 +388,7 @@ class Router {
     /**
      * @return string
      */
-    public function getDomain(): string
+    public function getDomain(): ?string
     {
         return $this->domain;
     }
