@@ -175,8 +175,7 @@ class Route implements \JsonSerializable {
         }
 
         // Get the parameters id
-        preg_match_all('/(\/)?:.+\/?/i',$this->path,$parameters);
-
+        preg_match_all('#(\/)?:[^\/]+\/?#i',$this->path,$parameters);
 
         array_shift($matches);
 
@@ -184,16 +183,13 @@ class Route implements \JsonSerializable {
 
         // Get the parameters from the path
         if(isset($parameters[0][0])) {
-            $keys = str_replace( '/', '', $parameters[0][0] );
-
-            $keys = trim( $keys, ':' );
-
-            $keys = explode( ':', $keys );
-
             // Create the associative array
             foreach($matches as  $key => $match){
 
-                $match_sort[$keys[$key]] = $match;
+                $k = str_replace( '/', '', $parameters[0][$key] );
+                $k = trim( $k, ':' );
+
+                $match_sort[$k] = $match;
             }
         }else{
             $match_sort = $matches;
@@ -297,8 +293,6 @@ class Route implements \JsonSerializable {
         $this->method = $method;
     }
 
-
-
     public function jsonSerialize()
     {
         return array(
@@ -306,6 +300,5 @@ class Route implements \JsonSerializable {
             'type' => $this->type
         );
     }
-
 
 }
