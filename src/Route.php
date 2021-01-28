@@ -293,6 +293,15 @@ class Route implements \JsonSerializable {
         $this->method = $method;
     }
 
+
+    /**
+     * @return array
+     */
+    public function getParameters() : array
+    {
+        return $this->matches;
+    }
+
     public function jsonSerialize()
     {
         return array(
@@ -300,5 +309,6 @@ class Route implements \JsonSerializable {
             'type' => $this->type
         );
     }
+
 
 }

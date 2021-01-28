@@ -200,6 +200,7 @@ class Router {
 
             /** @var route Route */
             if($route->match($this->url)){
+
                 if(!$route->isVisible()) {
                     if(!$this->securityService->isLoggedIn()) {
                         throw new UnauthorizedHttpException("Unauthorized");
@@ -210,6 +211,7 @@ class Router {
                     }
                 }
 
+                $this->addParamsToRequest($route);
 
                 $response =  $route->call(array_merge(array('security' => $this->securityService),$data));
 
@@ -217,6 +219,7 @@ class Router {
                 if(!$response instanceof Response) {
                     throw new \Exception(sprintf("Method %s does not return an instance of Response, %s given",$route->getMethod(),$response));
                 }
+
 
                 if($this->mode === self::MODE_STANDALONE) {
                     $response->send();
@@ -285,6 +288,24 @@ class Router {
     }
 
 
+    /**
+     * @param Route $route
+     * @return Route
+     */
+    protected function addParamsToRequest(Route $route) : Route
+    {
+        $params = $route->getParameters();
+
+        if(!is_array($params)) {
+            return $route;
+        }
+
+        foreach ($params as $key => $value) {
+            $this->getRequest()->query->set($key, $value);
+        }
+
+        return $route;
+    }
 
 
 
