@@ -2,7 +2,7 @@
     "name": "xusifob/router",
     "description": "A simple router to use for a quick web app",
     "require": {
-        "symfony/http-foundation": "^4.2",
+        "symfony/http-foundation": "^5.4",
         "php": ">=7.1",
         "ext-json": "*",
         "symfony/http-kernel": "^4.2"
